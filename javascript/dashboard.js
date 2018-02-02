@@ -869,6 +869,8 @@ dhis2.db.renderMessagesItem = function ($d, itemId) {
  */
 dhis2.db.getMessageHtml = function (message) {
 
+	function encode(e){return e.replace(/[^]/g,function(e){return"&#"+e.charCodeAt(0)+";"})}
+
     function getSender() {
         var firstName = message.lastSenderFirstname || "";
         var surname = message.lastSenderSurname || "";
@@ -882,7 +884,7 @@ dhis2.db.getMessageHtml = function (message) {
 
     return "<li class='message-item'> <a href='../dhis-web-messaging/readMessage.action?id=" + message.id + "' class='" + (message.read ? "" : "bold") +
         "'> <div> <span>" + getSender() + " " + getCount() + "</span> <span class='tipText' style='float:right'>" + message.lastMessage +
-        "</span> </div> <div> <span>" + message.name + "</span> </div> </a> </li>";
+        "</span> </div> <div> <span>" + encode(message.name) + "</span> </div> </a> </li>";
 }
 
 /**
