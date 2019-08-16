@@ -55,10 +55,10 @@ dhis2.db.tmpl = {
     "<a id='hitMore-${type}' href='javascript:dhis2.db.searchMore( \"${type}\" )'>${i18n_see_more_hits} &raquo;</a>" +
     "<a id='hitFewer-${type}' href='javascript:dhis2.db.searchFewer( \"${type}\" )' style='display:none'>&laquo; ${i18n_see_fewer_hits}</a></li>",
 
-    hitItem: "<li><a class='viewLink' href='${link}'><img src='../images/${img}.png'>${name}</a>" +
+    hitItem: "<li><a class='viewLink' href='${link}'><img src='../../../images/${img}.png'>${name}</a>" +
     "{{if canManage}}<a class='addLink' href='javascript:dhis2.db.addItemContent( \"${type}\", \"${id}\" )'>${i18n_add}</a>{{/if}}</li>",
 
-    appHitItem: "<li><a class='viewLink' href='javascript:dhis2.db.addItemContent( \"${type}\", \"${id}\" )'><img src='../images/${img}.png'>${name}</a>" +
+    appHitItem: "<li><a class='viewLink' href='javascript:dhis2.db.addItemContent( \"${type}\", \"${id}\" )'><img src='../../../images/${img}.png'>${name}</a>" +
     "{{if canManage}}<a class='addLink' href='javascript:dhis2.db.addItemContent( \"${type}\", \"${id}\" )'>${i18n_add}</a>{{/if}}</li>",
 
     chartItem: "<li id='liDrop-${itemId}' class='liDropItem'><div class='dropItem' id='drop-${itemId}' style='${style}' data-item='${itemId}'></div></li>" +
@@ -273,7 +273,7 @@ dhis2.db.openAddDashboardForm = function () {
 
 dhis2.db.openManageDashboardForm = function () {
     if (undefined !== dhis2.db.current()) {
-        $.getJSON("../api/dashboards/" + dhis2.db.current(), function (data) {
+        $.getJSON("../../../api/dashboards/" + dhis2.db.current(), function (data) {
             var name = data.name;
             $("#dashboardRename").val(name);
             $("#manageDashboardForm").dialog({
@@ -295,7 +295,7 @@ dhis2.db.addDashboard = function () {
 
     $.ajax({
         type: "post",
-        url: "../api/dashboards",
+        url: "../../../api/dashboards",
         data: item,
         contentType: "application/json",
         success: function (data, text, xhr) {
@@ -322,7 +322,7 @@ dhis2.db.renameDashboard = function () {
 
         $.ajax({
             type: "put",
-            url: "../api/dashboards/" + dhis2.db.current(),
+            url: "../../../api/dashboards/" + dhis2.db.current(),
             contentType: "application/json",
             data: data,
             success: function () {
@@ -337,7 +337,7 @@ dhis2.db.removeDashboard = function () {
     if (undefined !== dhis2.db.current()) {
         $.ajax({
             type: "delete",
-            url: "../api/dashboards/" + dhis2.db.current(),
+            url: "../../../api/dashboards/" + dhis2.db.current(),
             success: function () {
                 $("#manageDashboardForm").dialog("destroy");
                 dhis2.db.clearCurrent();
@@ -351,7 +351,7 @@ dhis2.db.removeDashboard = function () {
 dhis2.db.translateDashboard = function () {
     if (undefined !== dhis2.db.current()) {
         var currentPage = encodeURI(window.location.href);
-        window.location.href = "../dhis-web-commons/i18n.action?className=Dashboard&uid=" + dhis2.db.current() + "&returnUrl=" + currentPage;
+        window.location.href = "../../../dhis-web-commons/i18n.action?className=Dashboard&uid=" + dhis2.db.current() + "&returnUrl=" + currentPage;
     }
 }
 
@@ -399,7 +399,7 @@ dhis2.db.renderDashboardListLoadFirst = function () {
 
     $l.empty();
 
-    $.getJSON("../api/dashboards.json?fields=id,displayName&paging=false&links=false&" + dhis2.util.cacheBust(), function (data) {
+    $.getJSON("../../../api/dashboards.json?fields=id,displayName&paging=false&links=false&" + dhis2.util.cacheBust(), function (data) {
         if (undefined !== data.dashboards) {
             var first;
 
@@ -447,7 +447,7 @@ dhis2.db.getFullWidth = function () {
  * Toggles size of item. The order is 1) normal 2) double 3) full.
  */
 dhis2.db.resizeItem = function (id, isScrollbar) {
-    $.getJSON("../api/dashboardItems/" + id, function (item) {
+    $.getJSON("../../../api/dashboardItems/" + id, function (item) {
 
         var newShape = dhis2.db.shapeNormal;
 
@@ -466,7 +466,7 @@ dhis2.db.resizeItem = function (id, isScrollbar) {
 
         if (newShape) {
             $.ajax({
-                url: "../api/dashboardItems/" + id + "/shape/" + newShape,
+                url: "../../../api/dashboardItems/" + id + "/shape/" + newShape,
                 type: "put"
             });
         }
@@ -502,7 +502,7 @@ dhis2.db.setFullItemWidth = function (id, isScrollbar) {
 
 dhis2.db.drawWideItems = function () {
     if (undefined !== dhis2.db.current()) {
-        var url = "../api/dashboards/" + dhis2.db.current() + "?fields=dashboardItems[id,shape]",
+        var url = "../../../api/dashboards/" + dhis2.db.current() + "?fields=dashboardItems[id,shape]",
             viewPortWidth = $(window).width(),
             marginAndSpacing = 60,
             realWidth = ( viewPortWidth - marginAndSpacing );
@@ -546,7 +546,7 @@ dhis2.db.renderDashboard = function (id) {
 
     $("#dashboard-" + dhis2.db.current()).addClass("currentDashboard");
 
-    $.getJSON("../api/dashboards/" + id + "?fields=:all,dashboardItems[:all,reports[id,displayName],chart[id,displayName],map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],resources[id,displayName],users[id,displayName]]&" + dhis2.util.cacheBust(), function (data) {
+    $.getJSON("../../../api/dashboards/" + id + "?fields=:all,dashboardItems[:all,reports[id,displayName],chart[id,displayName],map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],resources[id,displayName],users[id,displayName]]&" + dhis2.util.cacheBust(), function (data) {
         $( "#dashboardTitle" ).html( data.displayName );
         $d = $("#contentList").empty();
 
@@ -571,25 +571,25 @@ dhis2.db.renderDashboard = function (id) {
             });
 
             // report table
-            reportTablePlugin.url = '..';
+            reportTablePlugin.url = '../../..';
             reportTablePlugin.dashboard = true;
             reportTablePlugin.showTitles = true;
             reportTablePlugin.load(dhis2.db.reportTableItems);
 
             // chart
-            chartPlugin.url = '..';
+            chartPlugin.url = '../../..';
             chartPlugin.dashboard = true;
             chartPlugin.showTitles = true;
             chartPlugin.load(dhis2.db.chartItems);
 
             // event report
-            eventReportPlugin.url = '..';
+            eventReportPlugin.url = '../../..';
             eventReportPlugin.dashboard = true;
             eventReportPlugin.showTitles = true;
             eventReportPlugin.load(dhis2.db.eventReportItems);
 
             // event chart
-            eventChartPlugin.url = '..';
+            eventChartPlugin.url = '../../..';
             eventChartPlugin.dashboard = true;
             eventChartPlugin.showTitles = true;
             eventChartPlugin.load(dhis2.db.eventChartItems);
@@ -778,20 +778,20 @@ dhis2.db.renderItem = function ($d, dashboardItem, width, prepend, autoRender) {
         }
     }
     else if ("USERS" == dashboardItem.type) {
-        dhis2.db.renderLinkItem($d, dashboardItem.id, dashboardItem.users, "Users" , "../dhis-web-messaging/profile.action?id=", "");
+        dhis2.db.renderLinkItem($d, dashboardItem.id, dashboardItem.users, "Users" , "../../../dhis-web-messaging/profile.action?id=", "");
     }
     else if ("REPORTS" == dashboardItem.type) {
-        dhis2.db.renderLinkItem($d, dashboardItem.id, dashboardItem.reports, "Reports", "../dhis-web-reporting/getReportParams.action?mode=report&uid=", "");
+        dhis2.db.renderLinkItem($d, dashboardItem.id, dashboardItem.reports, "Reports", "../../../dhis-web-reporting/getReportParams.action?mode=report&uid=", "");
     }
     else if ("RESOURCES" == dashboardItem.type) {
-        dhis2.db.renderLinkItem($d, dashboardItem.id, dashboardItem.resources, "Resources", "../api/documents/", "/data");
+        dhis2.db.renderLinkItem($d, dashboardItem.id, dashboardItem.resources, "Resources", "../../../api/documents/", "/data");
     }
     else if ("MESSAGES" == dashboardItem.type) {
         dhis2.db.renderMessagesItem($d, dashboardItem.id);
     }
     else if ("APP" == dashboardItem.type) {
         if (undefined === dhis2.db.apps) {
-            $.getJSON('../api/apps', function (apps) {
+            $.getJSON('../../../api/apps', function (apps) {
                 dhis2.db.apps = {};
                 $.each(apps, function (i, app) {
                     dhis2.db.apps[app.key] = app;
@@ -882,7 +882,7 @@ dhis2.db.getMessageHtml = function (message) {
         return (message.messageCount > 1 ? "(" + message.messageCount + ")" : "");
     }
 
-    return "<li class='message-item'> <a href='../dhis-web-messaging/readMessage.action?id=" + message.id + "' class='" + (message.read ? "" : "bold") +
+    return "<li class='message-item'> <a href='../../../dhis-web-messaging/readMessage.action?id=" + message.id + "' class='" + (message.read ? "" : "bold") +
         "'> <div> <span>" + getSender() + " " + getCount() + "</span> <span class='tipText' style='float:right'>" + message.lastMessage +
         "</span> </div> <div> <span>" + encode(message.name) + "</span> </div> </a> </li>";
 }
@@ -928,7 +928,7 @@ dhis2.db.updateMessagesItem = function($ul, itemId, page) {
     $ul.children( ".message-item").remove();
 
     // Fetch new list of messages
-    $.get("../api/messageConversations.json?fields=:all&pageSize=5&page=" + page, function (json) {
+    $.get("../../../api/messageConversations.json?fields=:all&pageSize=5&page=" + page, function (json) {
         $.each(json.messageConversations, function (index, message) {
 
             // Generate HTML for each message
@@ -977,7 +977,7 @@ dhis2.db.renderLinkItem = function ($d, itemId, contents, title, baseUrl, urlSuf
         html +=
             "<li><a href='" + baseUrl + content.id + urlSuffix + "'>" + content.displayName + "</a>" +
             "<a class='removeItemLink' href='javascript:dhis2.db.removeItemContent( \"" + itemId + "\", \"" + content.id + "\" )' title='" + i18n_remove + "'>" +
-            "<img src='../images/hide.png'></a></li>";
+            "<img src='../../../images/hide.png'></a></li>";
     });
 
     html += "</ul></div></li>";
@@ -999,7 +999,7 @@ dhis2.db.moveItem = function (id, destItemId, position) {
     $targetDropLi.insertBefore($destLi);
     $targetLi.insertBefore($destLi);
 
-    var url = "../api/dashboards/" + dhis2.db.current() + "/items/" + id + "/position/" + position;
+    var url = "../../../api/dashboards/" + dhis2.db.current() + "/items/" + id + "/position/" + position;
 
     $.post(url, function () {
     });
@@ -1009,7 +1009,7 @@ dhis2.db.addItemContent = function (type, id) {
     if (undefined !== dhis2.db.current()) {
         $.ajax({
             type: "post",
-            url: "../api/dashboards/" + dhis2.db.current() + "/items/content",
+            url: "../../../api/dashboards/" + dhis2.db.current() + "/items/content",
             data: {
                 type: type,
                 id: id
@@ -1019,7 +1019,7 @@ dhis2.db.addItemContent = function (type, id) {
                 var location = xhr.getResponseHeader("Location");
 
                 if (location) {
-                    $.getJSON("../api" + location, function (item) {
+                    $.getJSON("../../../api" + location, function (item) {
                         if (item && $.inArray(item.type, dhis2.db.visualItemTypes) != -1) {
                             $d = $("#contentList");
                             dhis2.db.renderItem($d, item, undefined, true, true);
@@ -1045,7 +1045,7 @@ dhis2.db.addItemContent = function (type, id) {
 dhis2.db.removeItem = function (id) {
     $.ajax({
         type: "delete",
-        url: "../api/dashboards/" + dhis2.db.current() + "/items/" + id,
+        url: "../../../api/dashboards/" + dhis2.db.current() + "/items/" + id,
         success: function () {
             dhis2.db.currentItem = undefined;
             $("#liDrop-" + id).remove();
@@ -1057,7 +1057,7 @@ dhis2.db.removeItem = function (id) {
 dhis2.db.removeItemContent = function (itemId, contentId) {
     $.ajax({
         type: "delete",
-        url: "../api/dashboards/" + dhis2.db.current() + "/items/" + itemId + "/content/" + contentId,
+        url: "../../../api/dashboards/" + dhis2.db.current() + "/items/" + itemId + "/content/" + contentId,
         success: function () {
             dhis2.db.renderDashboard(dhis2.db.current());
         }
@@ -1074,25 +1074,25 @@ dhis2.db.getIndex = function (itemId) {
 }
 
 dhis2.db.exploreChart = function (uid, interpretationId) {
-    //window.location.href = "../dhis-web-visualizer/index.html?id=" + uid;
-    window.location.href = "../dhis-web-visualizer/index.html?id=" + uid + ((interpretationId)?("&interpretationId=" + interpretationId):"");
+    //window.location.href = "../../../dhis-web-visualizer/index.html?id=" + uid;
+    window.location.href = "../../../dhis-web-visualizer/index.html?id=" + uid + ((interpretationId)?("&interpretationId=" + interpretationId):"");
 }
 
 dhis2.db.exploreEventChart = function (uid) {
-    window.location.href = "../dhis-web-event-visualizer/index.html?id=" + uid;
+    window.location.href = "../../../dhis-web-event-visualizer/index.html?id=" + uid;
 }
 
 dhis2.db.exploreMap = function (uid) {
-    window.location.href = "../dhis-web-mapping/index.html?id=" + uid;
+    window.location.href = "../../../dhis-web-mapping/index.html?id=" + uid;
 }
 
 dhis2.db.exploreReportTable = function (uid, interpretationId) {
-    //window.location.href = "../dhis-web-pivot/index.html?id=" + uid;
-    window.location.href = "../dhis-web-pivot/index.html?id=" + uid + ((interpretationId)?("&interpretationId=" + interpretationId):"");
+    //window.location.href = "../../../dhis-web-pivot/index.html?id=" + uid;
+    window.location.href = "../../../dhis-web-pivot/index.html?id=" + uid + ((interpretationId)?("&interpretationId=" + interpretationId):"");
 }
 
 dhis2.db.exploreEventReport = function (uid) {
-    window.location.href = "../dhis-web-event-reports/index.html?id=" + uid;
+    window.location.href = "../../../dhis-web-event-reports/index.html?id=" + uid;
 }
 
 dhis2.db.exploreApp = function (appKey, itemId) {
@@ -1100,7 +1100,7 @@ dhis2.db.exploreApp = function (appKey, itemId) {
 }
 
 dhis2.db.renderReportTable = function (tableId, itemId) {
-    $.get("../api/reportTables/" + tableId + "/data.html", function (data) {
+    $.get("../../../api/reportTables/" + tableId + "/data.html", function (data) {
         $("#pivot-" + itemId).html(data);
     });
 }
@@ -1143,7 +1143,7 @@ dhis2.db.search = function () {
         return undefined;
     }
 
-    var url = "../api/dashboards/q/" + query + dhis2.db.getMaxParams();
+    var url = "../../../api/dashboards/q/" + query + dhis2.db.getMaxParams();
 
     var hits = $.ajax({
         url: url,
@@ -1219,7 +1219,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.charts[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../dhis-web-visualizer/index.html?id=" + o.id,
+                    "link": "../../../dhis-web-visualizer/index.html?id=" + o.id,
                     "img": "chart_small",
                     "name": o.name,
                     "type": "CHART",
@@ -1241,7 +1241,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.eventCharts[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../dhis-web-event-visualizer/index.html?id=" + o.id,
+                    "link": "../../../dhis-web-event-visualizer/index.html?id=" + o.id,
                     "img": "chart_small",
                     "name": o.name,
                     "type": "EVENT_CHART",
@@ -1263,7 +1263,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.maps[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../dhis-web-mapping/index.html?id=" + o.id,
+                    "link": "../../../dhis-web-mapping/index.html?id=" + o.id,
                     "img": "map_small",
                     "name": o.name,
                     "type": "MAP",
@@ -1285,7 +1285,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.reportTables[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../dhis-web-pivot/index.html?id=" + o.id,
+                    "link": "../../../dhis-web-pivot/index.html?id=" + o.id,
                     "img": "table_small",
                     "name": o.name,
                     "type": "REPORT_TABLE",
@@ -1307,7 +1307,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.eventReports[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../dhis-web-event-reports/index.html?id=" + o.id,
+                    "link": "../../../dhis-web-event-reports/index.html?id=" + o.id,
                     "img": "table_small",
                     "name": o.name,
                     "type": "EVENT_REPORT",
@@ -1329,7 +1329,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.reports[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../dhis-web-reporting/getReportParams.action?uid=" + o.id,
+                    "link": "../../../dhis-web-reporting/getReportParams.action?uid=" + o.id,
                     "img": "standard_report_small",
                     "name": o.name,
                     "type": "REPORTS",
@@ -1351,7 +1351,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.resources[i];
                 $h.append($.tmpl(dhis2.db.tmpl.hitItem, {
                     "canManage": canManage,
-                    "link": "../api/documents/" + o.id,
+                    "link": "../../../api/documents/" + o.id,
                     "img": "document_small",
                     "name": o.name,
                     "type": "RESOURCES",
@@ -1373,7 +1373,7 @@ dhis2.db.renderSearch = function (data, $h) {
                 var o = data.apps[i];
                 $h.append($.tmpl(dhis2.db.tmpl.appHitItem, {
                     "canManage": canManage,
-                    "link": "../api/apps/" + o.key,
+                    "link": "../../../api/apps/" + o.key,
                     "img": "app_small",
                     "name": o.name,
                     "type": "APP",
@@ -1396,7 +1396,7 @@ dhis2.db.hideSearch = function () {
 dhis2.db.registerDashboardViewEvent = function () {
     var fav = dhis2.db.current() || "";
 
-    $.post("../api/dataStatistics?eventType=DASHBOARD_VIEW&favorite=" + fav);
+    $.post("../../../api/dataStatistics?eventType=DASHBOARD_VIEW&favorite=" + fav);
 }
 
 //------------------------------------------------------------------------------
@@ -1423,7 +1423,7 @@ dhis2.db.shareInterpretation = function () {
     if (text.length && $.trim(text).length) {
         text = $.trim(text);
 
-        var url = "../api/interpretations/" + dhis2.db.currentShareType + "/" + dhis2.db.currentShareId;
+        var url = "../../../api/interpretations/" + dhis2.db.currentShareType + "/" + dhis2.db.currentShareId;
 
         // TODO url += ( ou && ou.length ) ? "?ou=" + ou : "";
 
@@ -1578,7 +1578,7 @@ dhis2.db.showInterpretationPopup = function (event, id, type) {
 		exploreFunction = 'exploreEventReport'
 	}
 	
-	$.getJSON("../api/" + urlPath + "/" + id + ".json?fields=id,displayDescription,interpretations[id, text,lastUpdated,user[displayName],comments,likes]&" + dhis2.util.cacheBust(), function (data) {
+	$.getJSON("../../../api/" + urlPath + "/" + id + ".json?fields=id,displayDescription,interpretations[id, text,lastUpdated,user[displayName],comments,likes]&" + dhis2.util.cacheBust(), function (data) {
 		var interpretationPopup = $('#interpretationPopup');
 		
 		// Remove any previous content
@@ -1650,12 +1650,12 @@ $(document).ready(function () {
   selectionTreeSelection.setMultipleSelectionAllowed(true);
   selectionTree.clearSelectedOrganisationUnitsAndBuildTree();
 
-  $.getJSON("../api/me/user-account.json?" + dhis2.util.cacheBust(), function (json) {
+  $.getJSON("../../../api/me/user-account.json?" + dhis2.util.cacheBust(), function (json) {
     dhis2.db.currentKey = "dhis2.dashboard.current." + json.username;
     dhis2.db.renderDashboardListLoadFirst();
   });
 
-  $.getJSON("../api/system/info.json", function (json) {
+  $.getJSON("../../../api/system/info.json", function (json) {
     dhis2.db.contextPath = json.contextPath;
   });
 
