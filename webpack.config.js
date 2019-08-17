@@ -4,8 +4,8 @@ var webpack = require('webpack');
 var path = require('path');
 var colors = require('colors');
 
-//const isDevBuild = process.argv[1].indexOf('webpack-dev-server') !== -1;
-const isDevBuild = true;
+const isDevBuild = process.argv[1].indexOf('webpack-dev-server') !== -1;
+//const isDevBuild = true;
 
 const dhisConfigPath = process.env.DHIS2_HOME && `${process.env.DHIS2_HOME}/config`;
 let dhisConfig;

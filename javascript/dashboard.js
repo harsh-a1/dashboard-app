@@ -460,7 +460,7 @@ dhis2.db.renderDashboardListLoadFirst = function () {
 
             setTimeout(function(){
                 rotate(index+1,items,callback);
-            },100)            
+            },1000)            
         }
 
         function switchDashboard(state){
