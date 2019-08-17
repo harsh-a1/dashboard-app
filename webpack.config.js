@@ -4,7 +4,9 @@ var webpack = require('webpack');
 var path = require('path');
 var colors = require('colors');
 
-const isDevBuild = process.argv[1].indexOf('webpack-dev-server') !== -1;
+//const isDevBuild = process.argv[1].indexOf('webpack-dev-server') !== -1;
+const isDevBuild = true;
+
 const dhisConfigPath = process.env.DHIS2_HOME && `${process.env.DHIS2_HOME}/config`;
 let dhisConfig;
 
@@ -16,8 +18,8 @@ try {
     console.warn(`\nWARNING! Failed to load DHIS config:`, e.message);
     console.info('Using default config');
     dhisConfig = {
-        baseUrl: 'http://localhost:8080/dhis',
-        authorization: 'Basic aGFyc2g6RGlzdHJpY3RAMTIzNA=', // admin:district
+        baseUrl: 'http://localhost:8090/dhis',
+        authorization: 'Basic bmVoYTpOZWhhQDEyMzQ=', // admin:district
     };
 }
 console.log(JSON.stringify(dhisConfig, null, 2), '\n');

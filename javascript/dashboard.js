@@ -402,13 +402,15 @@ dhis2.db.renderDashboardListLoadFirst = function () {
     $.getJSON("../../../api/dashboards.json?fields=id,displayName&paging=false&links=false&" + dhis2.util.cacheBust(), function (data) {
         if (undefined !== data.dashboards) {
             var first;
-
+            var dashboardsMap = [];
             $.each(data.dashboards, function (index, dashboard) {
                 $l.append($.tmpl(dhis2.db.tmpl.dashboardLink, {"id": dashboard.id, "name": dashboard.displayName}));
 
                 if (index == 0) {
                     first = dashboard.id;
                 }
+
+                dashboardsMap[index] = dashboard.id;
             });
 
             if (undefined === dhis2.db.current()) {
@@ -416,17 +418,62 @@ dhis2.db.renderDashboardListLoadFirst = function () {
             }
 
             if (undefined !== dhis2.db.current()) {
-                dhis2.db.renderDashboard(dhis2.db.current());
+                dhis2.db.renderDashboard(dhis2.db.current(),TV_ON.bind(null,dashboardsMap,-1));
             }
             else {
                 dhis2.db.clearDashboard();
             }
+            
+            
         }
         else {
             dhis2.db.clearDashboard();
             $("#contentList").append($.tmpl(dhis2.db.tmpl.moduleIntro, {"i18n_click": i18n_click_add_new_to_get_started}));
         }
     });
+
+    function TV_ON(dashboardsMap,current_dashboard,item_data){
+      
+        var state = {
+            dashboardsMap : dashboardsMap,
+            current_dashboard : current_dashboard
+        }
+
+        for (var key in item_data.dashboardItems){
+            var id = item_data.dashboardItems[key].id;
+            $('#li-'+id).hide();
+        }
+
+        rotate(0,item_data.dashboardItems,switchDashboard.bind(null,state));
+        
+        function rotate(index,items,callback){
+            if (index == items.length){
+                callback();
+                return;
+            }
+
+            if (index != 0){
+                $('#li-'+items[index-1].id).hide();
+            }
+            
+            $('#li-'+items[index].id).show();
+
+            setTimeout(function(){
+                rotate(index+1,items,callback);
+            },100)            
+        }
+
+        function switchDashboard(state){
+            if (state.current_dashboard == Object.keys(state.dashboardsMap).length-1){
+                state.current_dashboard = 0;
+            }else{
+                state.current_dashboard += 1;
+            }
+            
+            dhis2.db.renderDashboard(state.dashboardsMap[state.current_dashboard],TV_ON.bind(null,state.dashboardsMap ,state.current_dashboard))
+
+        }
+    }
 }
 
 dhis2.db.clearDashboard = function () {
@@ -528,7 +575,7 @@ dhis2.db.renderDashboardWithEvent = function (id) {
     dhis2.db.registerDashboardViewEvent();
 }
 
-dhis2.db.renderDashboard = function (id) {
+dhis2.db.renderDashboard = function (id,mainDashboardCallback) {
     if (!id) {
         return;
     }
@@ -551,24 +598,25 @@ dhis2.db.renderDashboard = function (id) {
         $d = $("#contentList").empty();
 
         updateSharing(data);
-
         if (data.dashboardItems && data.dashboardItems.length) {
             $.each(data.dashboardItems, function (index, dashboardItem) {
                 if (!dashboardItem) {
                     return true;
                 }
 
-                var width = dhis2.db.widthNormal;
+                var width = dhis2.db.getFullWidth();
 
-                if (dhis2.db.shapeFullWidth == dashboardItem.shape) {
+           /*     if (dhis2.db.shapeFullWidth == dashboardItem.shape) {
                     width = fullWidth;
                 }
                 else if (dhis2.db.shapeDoubleWidth == dashboardItem.shape) {
                     width = dhis2.db.widthDouble;
                 }
-
+*/
                 dhis2.db.renderItem($d, dashboardItem, width, false);
             });
+
+            mainDashboardCallback(data);
 
             // report table
             reportTablePlugin.url = '../../..';
