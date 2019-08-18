@@ -30,7 +30,9 @@ dhis2.db.shapeFullWidth = "FULL_WIDTH";
 dhis2.db.widthNormal = 421;
 dhis2.db.widthDouble = 860;
 dhis2.db.visualItemTypes = ["CHART", "EVENT_CHART", "MAP", "REPORT_TABLE", "EVENT_REPORT", "APP"];
-dhis2.db.itemContentHeight = 317;
+dhis2.db.itemContentHeight = $(window).height()-200;
+dhis2.db.itemContentWidth = $(window).width()-100;
+
 dhis2.db.itemScrollbarWidth = /\bchrome\b/.test(navigator.userAgent.toLowerCase()) ? 8 : 17;
 dhis2.db.reportTableItems = [];
 dhis2.db.chartItems = [];
@@ -45,7 +47,7 @@ dhis2.db.eventChartItems = [];
 //------------------------------------------------------------------------------
 
 dhis2.db.tmpl = {
-    dashboardLink: "<li id='dashboard-${id}'><a href='javascript:dhis2.db.renderDashboardWithEvent( \"${id}\" )'>${name}</a></li>",
+    dashboardLink: "<li id='dashboard-${id}'><a>${name}</a></li>",
 
     moduleIntro: "<li><div class='dasboardIntro'>${i18n_click}</div></li>",
 
@@ -96,8 +98,9 @@ dhis2.db.tmpl = {
     "{{if interpretationCount > 0}}<a href='#' onclick='dhis2.db.showInterpretationPopup( event, \"${id}\", \"MAP\" );return false;' title=\"${interpretationCount} interpretations\"><i class=\"fa fa-comments-o\"></i>${interpretationCount}</a>{{/if}}" +
     "{{if interpretationLikeCount > 0}}<a href='#' onclick='dhis2.db.showInterpretationPopup( event, \"${id}\", \"MAP\" );return false;' title=\"${interpretationLikeCount} likes\"><i class=\"fa fa-thumbs-o-up\"></i>${interpretationLikeCount}</a>{{/if}}" +
     "<i class=\"fa fa-arrows dragIcon\" title=\"${i18n_click_and_drag_to_new_position}\"></i></div>" +
-    "<div id='plugin-${itemId}' style='width:100%; height:${height}px'></div>" +
-    "</div></li>",
+   // "<div id='plugin-${itemId}' style='width:100%; height:${height}px'></div>" +
+        "<div id='plugin-${itemId}' style='width:100%; height:" + dhis2.db.itemContentHeight + "px'></div>" +
+        "</div></li>",
 
     reportTableItem: "<li id='liDrop-${itemId}' class='liDropItem'><div class='dropItem' id='drop-${itemId}' data-item='${itemId}'></div></li>" +
     "<li id='li-${itemId}' class='liItem'><div class='item' id='${itemId}' style='${style}'><div class='itemHeader'>" +
@@ -108,7 +111,9 @@ dhis2.db.tmpl = {
     "{{if interpretationCount > 0}}<a href='#' onclick='dhis2.db.showInterpretationPopup( event, \"${id}\", \"REPORT_TABLE\" );return false;' title=\"${interpretationCount} interpretations\"><i class=\"fa fa-comments-o\"></i>${interpretationCount}</a>{{/if}}" +
     "{{if interpretationLikeCount > 0}}<a href='#' onclick='dhis2.db.showInterpretationPopup( event, \"${id}\", \"REPORT_TABLE\" );return false;' title=\"${interpretationLikeCount} likes\"><i class=\"fa fa-thumbs-o-up\"></i>${interpretationLikeCount}</a>{{/if}}" +
     "<i class=\"fa fa-arrows dragIcon\" title=\"${i18n_click_and_drag_to_new_position}\"></i></div>" +
-    "<div id='plugin-${itemId}'></div>" +
+        //"<div id='plugin-${itemId}'></div>" +
+        "<div id='plugin-${itemId}' style='width:100%; height:" + dhis2.db.itemContentHeight + "px'></div>" +
+
     "</div></li>",
 
     eventReportItem: "<li id='liDrop-${itemId}' class='liDropItem'><div class='dropItem' id='drop-${itemId}' data-item='${itemId}'></div></li>" +
@@ -164,7 +169,7 @@ dhis2.db.tmpl = {
 };
 
 dhis2.db.dashboardReady = function () {
-    $(".item").draggable({
+   /* $(".item").draggable({
         containment: "#contentDiv",
         helper: "clone",
         stack: ".item",
@@ -188,6 +193,7 @@ dhis2.db.dashboardReady = function () {
         over: dhis2.db.lastDropOver,
         out: dhis2.db.lastDropOut
     });
+*/
 }
 
 dhis2.db.addDragDrop = function (id) {
@@ -458,9 +464,9 @@ dhis2.db.renderDashboardListLoadFirst = function () {
             
             $('#li-'+items[index].id).show();
 
-            setTimeout(function(){
+ rasoi@gma            setTimeout(function(){
                 rotate(index+1,items,callback);
-            },1000)            
+            },5000)            
         }
 
         function switchDashboard(state){
@@ -604,7 +610,7 @@ dhis2.db.renderDashboard = function (id,mainDashboardCallback) {
                     return true;
                 }
 
-                var width = dhis2.db.getFullWidth();
+                var width = dhis2.db.itemContentWidth;
 
            /*     if (dhis2.db.shapeFullWidth == dashboardItem.shape) {
                     width = fullWidth;
@@ -616,8 +622,10 @@ dhis2.db.renderDashboard = function (id,mainDashboardCallback) {
                 dhis2.db.renderItem($d, dashboardItem, width, false);
             });
 
-            mainDashboardCallback(data);
-
+            if(mainDashboardCallback){
+                mainDashboardCallback(data);
+            }
+            
             // report table
             reportTablePlugin.url = '../../..';
             reportTablePlugin.dashboard = true;
@@ -665,11 +673,11 @@ dhis2.db.linkItemHeaderHtml = function (itemId, title) {
 }
 
 dhis2.db.renderItem = function ($d, dashboardItem, width, prepend, autoRender) {
-    width = width || dhis2.db.widthNormal;
+    width = dhis2.db.itemContentWidth ;
     prepend = prepend || false;
     autoRender = autoRender || false;
 
-    var graphStyle = "width:" + width + "px; overflow:hidden;";
+    var graphStyle = "width:" + width + "px; overflow:scroll;";
     var tableStyle = "width:" + width + "px;";
     var userOrgUnit = dhis2.db.currentUserOrgUnit || [];
 

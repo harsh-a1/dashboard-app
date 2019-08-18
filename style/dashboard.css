@@ -5,7 +5,10 @@
 
 #contentDiv
 {
-  position: relative;
+    position: relative;
+    width: 95%;
+    margin-left : 2.5%;
+    margin-right:2.5%;
 }
 
 #contentList
@@ -98,9 +101,9 @@
 {
   background-color: #fff;
   border: 1px solid #ccc;
-  height: 342px;
+  /*height: 342px;
   width: 417px;
-  padding: 4px;
+  */padding: 4px;
   margin: 0 8px 8px 0;
   border-radius: 3px;
   cursor: pointer;
@@ -139,9 +142,9 @@
 
 .dropItem
 {
-  width: 408px;
+  /*width: 408px;
   height: 333px;
-  padding: 6px;
+  */padding: 6px;
   margin: 0 17px 17px 0;
   border: 1px dashed #9ec5df;
   background-color: #e9f5fb;
@@ -850,7 +853,7 @@ div#selectionTree
 #contentDiv
 {
   top: 0;
-  width: 960px;
+ 
 }
 }
 
@@ -904,7 +907,7 @@ div#selectionTree
 
 /* TV */
 
-#dashboardMenu, #searchDiv, #searchButton, #hitDiv, #dashboardControl, #cogButton, #updateProfileCont, #messageCont, #interpretationCont, #i18n_write_feedback
+#dashboardMenu, #searchDiv, #searchButton, #hitDiv, #dashboardControl, #cogButton, #updateProfileCont, #messageCont, #interpretationCont
 {
     display: none !important;
 }
