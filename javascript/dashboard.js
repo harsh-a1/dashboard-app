@@ -30,8 +30,8 @@ dhis2.db.shapeFullWidth = "FULL_WIDTH";
 dhis2.db.widthNormal = 421;
 dhis2.db.widthDouble = 860;
 dhis2.db.visualItemTypes = ["CHART", "EVENT_CHART", "MAP", "REPORT_TABLE", "EVENT_REPORT", "APP"];
-dhis2.db.itemContentHeight = $(window).height()-200;
-dhis2.db.itemContentWidth = $(window).width()-100;
+dhis2.db.itemContentHeight = $(window).height()- ($(window).height()*(.20));
+dhis2.db.itemContentWidth = $(window).width() - ($(window).width()*(.20));
 
 dhis2.db.itemScrollbarWidth = /\bchrome\b/.test(navigator.userAgent.toLowerCase()) ? 8 : 17;
 dhis2.db.reportTableItems = [];
@@ -39,6 +39,7 @@ dhis2.db.chartItems = [];
 dhis2.db.eventReportItems = [];
 dhis2.db.eventChartItems = [];
 
+toggleFullScreen();
 // TODO support table as link and embedded
 // TODO double horizontal size
 
@@ -447,7 +448,7 @@ dhis2.db.renderDashboardListLoadFirst = function () {
 
         for (var key in item_data.dashboardItems){
             var id = item_data.dashboardItems[key].id;
-            $('#li-'+id).hide();
+       //     $('#'+id).hide();
         }
 
         rotate(0,item_data.dashboardItems,switchDashboard.bind(null,state));
@@ -459,12 +460,12 @@ dhis2.db.renderDashboardListLoadFirst = function () {
             }
 
             if (index != 0){
-                $('#li-'+items[index-1].id).hide();
+                $('#'+items[index-1].id).hide();
             }
             
-            $('#li-'+items[index].id).show();
+            $('#'+items[index].id).show();
 
- rasoi@gma            setTimeout(function(){
+             setTimeout(function(){
                 rotate(index+1,items,callback);
             },5000)            
         }
@@ -677,7 +678,7 @@ dhis2.db.renderItem = function ($d, dashboardItem, width, prepend, autoRender) {
     prepend = prepend || false;
     autoRender = autoRender || false;
 
-    var graphStyle = "width:" + width + "px; overflow:scroll;";
+    var graphStyle = "width:" + width + "px; overflow:auto;";
     var tableStyle = "width:" + width + "px;";
     var userOrgUnit = dhis2.db.currentUserOrgUnit || [];
 
@@ -1719,3 +1720,22 @@ $(document).ready(function () {
   dhis2.db.initInterpretationPopupEvents();
 });
 
+    
+function toggleFullScreen() {
+    var videoElement = document.body; // Make the body go full screen.
+
+    if (!document.mozFullScreen && !document.webkitFullScreen) {
+      if (videoElement.mozRequestFullScreen) {
+        videoElement.mozRequestFullScreen();
+      } else {
+        videoElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+      }
+    } else {
+      if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else {
+        document.webkitCancelFullScreen();
+      }
+    }
+  }
+  

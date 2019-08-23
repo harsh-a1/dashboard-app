@@ -5,16 +5,16 @@
 
 #contentDiv
 {
-    position: relative;
-    width: 95%;
-    margin-left : 2.5%;
-    margin-right:2.5%;
+    width:100%;
+    margin:auto;
 }
 
 #contentList
 {
-  list-style-type: none;
-  display: inline-block;
+    list-style-type: none;
+    display:block;
+    width:92%;
+    margin-left:8%;
 }
 
 #dashboardMenu
@@ -39,7 +39,8 @@
   grid-column-end: 2;
   grid-row-start: 1;
   grid-row-end: 1;
-    margin-left: 10px;
+  margin-left: 10px;
+  margin-top:2%;
 }
 
 #dashboardListWrapper
@@ -103,8 +104,8 @@
   border: 1px solid #ccc;
   /*height: 342px;
   width: 417px;
-  */padding: 4px;
-  margin: 0 8px 8px 0;
+ */padding: 4px;
+  margin-bottom:100%;
   border-radius: 3px;
   cursor: pointer;
   box-shadow: #ddd 0 1px 2px 0;
@@ -144,8 +145,8 @@
 {
   /*width: 408px;
   height: 333px;
-  */padding: 6px;
-  margin: 0 17px 17px 0;
+  */padding: 0px;
+  margin: 0 0px 0px 0;
   border: 1px dashed #9ec5df;
   background-color: #e9f5fb;
   border-radius: 3px;
@@ -183,7 +184,7 @@
 .itemList li
 {
   float: none;
-  padding: 7px 10px;
+  padding: 0px 0px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -912,3 +913,14 @@ div#selectionTree
     display: none !important;
 }
 
+#dashboardTitle{
+  text-align: center;
+  font-weight:bold;
+  color:#3162C5;
+
+}
+
+#dashboardHeader{
+    margin: auto;
+    width: 50%;
+}
